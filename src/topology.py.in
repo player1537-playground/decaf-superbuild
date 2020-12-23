@@ -1,0 +1,26 @@
+# --- include the following 4 lines each time ---
+
+import networkx as nx
+import os
+import imp
+wf = imp.load_source('workflow', '@Decaf_Python_EXECUTABLE@')
+
+# --- set your options here ---
+
+evaluate = wf.Node("evaluate", start_proc=0, nprocs=1, func='evaluate', cmdline='@CMAKE_CURRENT_BINARY_DIR@/libevaluate.so')
+e_out = evaluate.addOutputPort("e_out")
+e_in = evaluate.addInputPort("e_in")
+e_in.setTokens(1)
+
+steer = wf.Node("steer",  start_proc=0, nprocs=1, func='steer', cmdline='@CMAKE_CURRENT_BINARY_DIR@/libsteer.so')
+s_out = steer.addOutputPort("s_out")
+s_in = steer.addInputPort("s_in")
+
+visualize = wf.Node("visualize", start_proc=1, nprocs=1, func='visualize', cmdline='@CMAKE_CURRENT_BINARY_DIR@/libvisualize.so')
+v_in = visualize.addInputPort("v_in")
+
+wf.Edge(e_out, s_in, start_proc=0, nprocs=0, func='N/A', path='N/A', cmdline='N/A', prod_dflow_redist='count', dflow_con_redist='count')
+wf.Edge(s_out, e_in, start_proc=0, nprocs=0, func='N/A', path='N/A', cmdline='N/A', prod_dflow_redist='count', dflow_con_redist='count')
+wf.Edge(e_out, v_in, start_proc=0, nprocs=0, func='N/A', path='N/A', cmdline='N/A', prod_dflow_redist='count', dflow_con_redist='count')
+
+wf.processGraph("decaf-henson")

@@ -1,0 +1,14 @@
+/.spack-env
+/Decaf
+/Diy
+/Henson
+/QHull
+/Tess
+/decaf-henson.json
+/decaf-henson.sh
+/hostfile_workflow.txt
+/spack.lock
+/spack
+/venv
+/build
+/stage
